@@ -74,9 +74,9 @@ class AuthServiceImplTest {
     @Test
     void register_emailAlreadyExists_throwsConflict() {
         RegisterRequestDto request = new RegisterRequestDto();
+        request.setName("John");
         request.setEmail("john@example.com");
         request.setPassword("password123");
-        request.setName("John");
 
         when(userRepository.existsByEmail("john@example.com")).thenReturn(true);
 
