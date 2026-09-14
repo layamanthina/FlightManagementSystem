@@ -1,0 +1,82 @@
+# ============================================================
+# Flight Management System — CI/CD Pipeline
+# Triggers: push to main, pull requests to main
+# Steps:  Build → Test → JaCoCo Coverage → SonarCloud Analysis
+# ============================================================
+
+name: Build, Test & SonarCloud Analysis
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-analyse:
+    name: Build, Test & Analyse
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # --------------------------------------------------------
+      # 1. Checkout the full git history
+      #    SonarCloud needs full history for blame annotations
+      # --------------------------------------------------------
+      - name: Checkout source code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # --------------------------------------------------------
+      # 2. Set up Java 21 with Maven cache
+      # --------------------------------------------------------
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      # --------------------------------------------------------
+      # 3. Build all modules, run all JUnit tests,
+      #    and generate JaCoCo XML coverage reports.
+      #
+      #    -B            = batch mode (no interactive prompts)
+      #    verify        = compile + test + jacoco:report
+      #    -Dspring-boot.run.skip=true  = skip app startup
+      # --------------------------------------------------------
+      - name: Build all modules and run tests
+        run: mvn -B verify --file pom.xml
+        env:
+          # Provide dummy DB values so Spring context does not
+          # fail to start during test phase
+          DB_USERNAME: root
+          DB_PASSWORD: root
+          JWT_SECRET: flightmanagementsystemsecurejwtsecretkey123456789
+          JWT_EXPIRATION_MS: 86400000
+
+      # --------------------------------------------------------
+      # 4. Run SonarCloud analysis
+      #    SONAR_TOKEN must be set in GitHub repository secrets:
+      #    Settings → Secrets → Actions → New repository secret
+      #    Name:  SONAR_TOKEN
+      #    Value: <your SonarCloud token>
+      # --------------------------------------------------------
+      - name: SonarCloud Analysis
+        run: >
+          mvn -B sonar:sonar
+          --file pom.xml
+          -Dsonar.projectKey=layamanthina_FlightManagementSystem
+          -Dsonar.organization=layamanthina
+          -Dsonar.host.url=https://sonarcloud.io
+          -Dsonar.token=${{ secrets.SONAR_TOKEN }}
+          -Dsonar.coverage.jacoco.xmlReportPaths=**/target/site/jacoco/jacoco.xml
+          -Dsonar.java.binaries=**/target/classes
+          -Dsonar.sources=src/main/java
+          -Dsonar.tests=src/test/java
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

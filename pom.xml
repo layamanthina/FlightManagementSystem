@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- ============================================================
+         Root / Aggregator POM
+         All microservices inherit from spring-boot-starter-parent.
+         This pom only aggregates modules and configures shared
+         build tooling (JaCoCo + Sonar) so it does NOT itself
+         extend spring-boot-starter-parent.
+    ============================================================ -->
+
+    <groupId>com.flightmanagement</groupId>
+    <artifactId>flight-management-system</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>Flight Management System</name>
+    <description>Root aggregator POM for Flight Management System microservices</description>
+
+    <!-- ============================================================
+         Module declarations — Maven will build these in order
+    ============================================================ -->
+    <modules>
+        <module>eureka-server</module>
+        <module>user-service</module>
+        <module>flight-service</module>
+        <module>booking-service</module>
+        <module>api-gateway</module>
+    </modules>
+
+    <!-- ============================================================
+         Shared properties
+    ============================================================ -->
+    <properties>
+        <java.version>21</java.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <!-- JaCoCo -->
+        <jacoco.version>0.8.12</jacoco.version>
+
+        <!-- SonarCloud -->
+        <sonar.organization>layamanthina</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.projectKey>layamanthina_FlightManagementSystem</sonar.projectKey>
+        <sonar.projectName>FlightManagementSystem</sonar.projectName>
+
+        <!-- Tell Sonar where to find JaCoCo XML reports for each module -->
+        <sonar.coverage.jacoco.xmlReportPaths>
+            ${project.basedir}/target/site/jacoco/jacoco.xml
+        </sonar.coverage.jacoco.xmlReportPaths>
+
+        <!-- Exclude generated / config classes from coverage -->
+        <sonar.exclusions>
+            **/entity/**,
+            **/dto/**,
+            **/enums/**,
+            **/*Application.java,
+            **/config/**
+        </sonar.exclusions>
+
+        <!-- Lombok-generated code should not be analysed -->
+        <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+    </properties>
+
+    <!-- ============================================================
+         Build — plugin management shared across all child modules
+    ============================================================ -->
+    <build>
+        <pluginManagement>
+            <plugins>
+
+                <!-- JaCoCo: instrument tests and generate XML coverage report -->
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>${jacoco.version}</version>
+                    <executions>
+                        <!-- Prepare the JaCoCo agent before tests run -->
+                        <execution>
+                            <id>jacoco-prepare-agent</id>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                        </execution>
+                        <!-- Generate XML report after tests complete -->
+                        <execution>
+                            <id>jacoco-report</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>report</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <!-- SonarQube / SonarCloud Maven plugin -->
+                <plugin>
+                    <groupId>org.sonarsource.scanner.maven</groupId>
+                    <artifactId>sonar-maven-plugin</artifactId>
+                    <version>4.0.0.4121</version>
+                </plugin>
+
+            </plugins>
+        </pluginManagement>
+
+        <!-- Apply JaCoCo to every child module automatically -->
+        <plugins>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+                <executions>
+                    <execution>
+                        <id>jacoco-prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>jacoco-report</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
