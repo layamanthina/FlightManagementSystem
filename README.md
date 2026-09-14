@@ -352,3 +352,4 @@ FlightManagementSystem/
 - JWT secret is externalized via environment variable `JWT_SECRET`
 - Log injection is prevented by sanitizing user-controlled input before logging
 - CSRF is disabled — this is a stateless REST API using JWT (no session cookies)
+Trigger CI 
