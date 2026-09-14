@@ -1,0 +1,5 @@
+package com.flightmanagement.userservice.security;
+
+public class JwtService {
+
+}

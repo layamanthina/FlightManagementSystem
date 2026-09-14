@@ -1,0 +1,23 @@
+package com.flightmanagement.userservice.service.impl;
+
+import org.springframework.stereotype.Service;
+
+import com.flightmanagement.userservice.dto.AuthResponseDto;
+import com.flightmanagement.userservice.dto.LoginRequestDto;
+import com.flightmanagement.userservice.dto.RegisterRequestDto;
+import com.flightmanagement.userservice.service.AuthService;
+
+@Service
+public class AuthServiceImpl implements AuthService {
+
+    @Override
+    public String register(RegisterRequestDto request) {
+        return null;
+    }
+
+    @Override
+    public AuthResponseDto login(LoginRequestDto request) {
+        return null;
+    }
+
+}

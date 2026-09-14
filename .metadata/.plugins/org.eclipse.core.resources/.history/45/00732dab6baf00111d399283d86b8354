@@ -1,0 +1,5 @@
+package com.flightmanagement.userservice.repository;
+
+public class UserRepository {
+
+}

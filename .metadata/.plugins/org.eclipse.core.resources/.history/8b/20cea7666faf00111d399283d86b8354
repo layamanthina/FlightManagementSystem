@@ -1,0 +1,63 @@
+package com.flightmanagement.userservice.exception;
+
+import java.time.LocalDateTime;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import com.flightmanagement.userservice.dto.ErrorResponseDto;
+
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponseDto> handleUserAlreadyExistsException(
+            UserAlreadyExistsException exception) {
+
+        ErrorResponseDto response = new ErrorResponseDto(
+                exception.getMessage(),
+                HttpStatus.CONFLICT.value(),
+                LocalDateTime.now());
+
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ErrorResponseDto> handleInvalidCredentialsException(
+            InvalidCredentialsException exception) {
+
+        ErrorResponseDto response = new ErrorResponseDto(
+                exception.getMessage(),
+                HttpStatus.UNAUTHORIZED.value(),
+                LocalDateTime.now());
+
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleResourceNotFoundException(
+            ResourceNotFoundException exception) {
+
+        ErrorResponseDto response = new ErrorResponseDto(
+                exception.getMessage(),
+                HttpStatus.NOT_FOUND.value(),
+                LocalDateTime.now());
+
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponseDto> handleException(
+            Exception exception) {
+
+        ErrorResponseDto response = new ErrorResponseDto(
+                exception.getMessage(),
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                LocalDateTime.now());
+
+        return new ResponseEntity<>(response,
+                HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}

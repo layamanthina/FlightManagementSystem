@@ -1,0 +1,5 @@
+package com.flightmanagement.userservice.service.impl;
+
+public class AuthServiceImpl {
+
+}

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename package &apos;com.flightmanagement.config&apos; to &apos;com.flightmanagement.apigateway.config&apos;&#x0D;&#x0A;- Original project: &apos;api-gateway&apos;&#x0D;&#x0A;- Original element: &apos;api-gateway/src/main/java/com.flightmanagement.config&apos;&#x0D;&#x0A;- Renamed element: &apos;api-gateway/src/main/java/com.flightmanagement.apigateway.config&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" description="Rename package &apos;com.flightmanagement.config&apos;" flags="589830" hierarchical="false" id="org.eclipse.jdt.ui.rename.package" input="/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.flightmanagement.config" name="com.flightmanagement.apigateway.config" qualified="false" references="true" stamp="1789300729913" textual="false" version="1.0"/>
+</session>

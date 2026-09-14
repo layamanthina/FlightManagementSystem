@@ -1,0 +1,5 @@
+package com.flightmanagement.userservice.dto;
+
+public class ErrorResponseDto {
+
+}

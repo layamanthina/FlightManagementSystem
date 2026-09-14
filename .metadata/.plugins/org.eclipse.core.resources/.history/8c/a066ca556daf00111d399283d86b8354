@@ -1,0 +1,5 @@
+package com.flightmanagement.userservice.exception;
+
+public class UserAlreadyExistsException {
+
+}

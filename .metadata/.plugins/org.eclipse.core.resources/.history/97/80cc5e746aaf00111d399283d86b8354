@@ -1,0 +1,5 @@
+package com.flightmanagement.config;
+
+public class SecurityConfig {
+
+}
